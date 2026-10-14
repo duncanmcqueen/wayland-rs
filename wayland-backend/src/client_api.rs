@@ -169,6 +169,11 @@ impl Backend {
         client_impl::InnerBackend::connect(stream).map(|backend| Self { backend })
     }
 
+    #[cfg(all(target_os = "haiku", feature = "client_system"))]
+    pub fn connect_in_process() -> Result<Self, NoWaylandLib> {
+        client_impl::InnerBackend::connect_in_process().map(|backend| Self { backend })
+    }
+
     /// Get a [`WeakBackend`] from this backend
     pub fn downgrade(&self) -> WeakBackend {
         WeakBackend { inner: self.backend.downgrade() }

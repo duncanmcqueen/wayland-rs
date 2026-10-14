@@ -33,3 +33,8 @@ libwayland_1_23 = ["wayland-backend/libwayland_client_1_23"]
 [package.metadata.docs.rs]
 all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
+
+[target.'cfg(target_os = "haiku")'.dependencies.wayland-backend]
+version = "0.3.17"
+path = "../wayland-backend"
+features = ["client_system", "server_system"]

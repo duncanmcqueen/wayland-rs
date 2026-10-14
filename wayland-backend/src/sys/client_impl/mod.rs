@@ -268,6 +268,20 @@ impl InnerBackend {
         Ok(Self::from_display(display, true))
     }
 
+    #[cfg(target_os = "haiku")]
+    pub fn connect_in_process() -> Result<Self, NoWaylandLib> {
+        if !is_lib_available() {
+            return Err(NoWaylandLib);
+        }
+        let display = unsafe {
+            ffi_dispatch!(wayland_client_handle(), wl_display_connect, std::ptr::null())
+        };
+        if display.is_null() {
+            return Err(NoWaylandLib);
+        }
+        Ok(Self::from_display(display, true))
+    }
+
     pub unsafe fn from_foreign_display(display: *mut wl_display) -> Self {
         Self::from_display(display, false)
     }
